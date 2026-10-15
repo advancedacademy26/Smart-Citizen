@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Smart Citizen Passport</title>
   <style>
-    /* ==========================================================================
-       BUG-PROOF EMBEDDED STYLESHEET (Removes all external file block dependencies)
-       ========================================================================== */
+    /* ==========================================
+       EMBEDDED STYLESHEET
+       ========================================== */
     body {
       margin: 0;
       padding: 0;
@@ -108,7 +108,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- INTERMEDIARY BOOTH SCAN SUCCESS VIEW -->
+    <!-- MISSION CLEARANCE POPUP MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -116,24 +116,25 @@
         <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
       <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
-      <button type="button" onclick="closeMissionView()">CC Return to Journey Hub</button>
+      <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN SCROLLING INTERACTIVE STREAM HUB -->
+    <!-- MAIN INTERACTIVE APP STREAM -->
     <div id="screen-main-layout">
-      <!-- STEP 1: VISITOR ACCOUNT GENERATION FORM -->
+      <!-- STEP 1: REGISTRATION COMPONENT -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
         <div class="local-input-group">
+          <!-- ⚠️ CRUCIAL FIX: Hardwired ID parameters re-linked to match JS engines lookup filters -->
           <input type="text" id="input-name" placeholder="Type Your Full Name">
           <input type="text" id="input-class" placeholder="Type Your Class">
           <input type="text" id="input-section" placeholder="Type Your Section">
-          <button type="button" id="start-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+          <button type="button" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
         </div>
       </div>
 
-      <!-- STEP 2: PASSPORT DATA OUTPUT BADGE PANEL -->
+      <!-- STEP 2: SUMMARY COMPONENT -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -165,7 +166,7 @@
         </div>
       </div>
 
-      <!-- STEP 4: GRAND FINALE CERTIFICATE CONTAINER WRAPPER -->
+      <!-- STEP 4: GRAND FINALE CERTIFICATE REWARD OUTPUT -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
@@ -192,3 +193,6 @@
       
       if (isNewStart === 'true') {
         localStorage.clear();
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
