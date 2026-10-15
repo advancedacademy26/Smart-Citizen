@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Citizen Passport</title>
+  <style>
+    /* ==========================================================================
+       BUG-PROOF EMBEDDED STYLESHEET (Removes all external file block dependencies)
+       ========================================================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+    }
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      background-color: #1e1e1e;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    header {
+      background: linear-gradient(135deg, #0f2027, #203a43);
+      color: #d4af37;
+      padding: 18px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2rem;
+      border-bottom: 2px solid #d4af37;
+    }
+    .content-section {
+      padding: 20px;
+      border-bottom: 1px solid #333;
+    }
+    .text-center { text-align: center; }
+    h2 { color: #d4af37; margin-top: 0; font-size: 1.25rem; }
+    h3 { color: #ffffff; font-size: 1rem; margin: 10px 0 5px 0; }
+    .instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
+    
+    .local-input-group input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      margin-bottom: 12px;
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #d4af37;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover { background-color: #f3cc4a; }
+    
+    .profile-summary {
+      background-color: #2d2d2d;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border-left: 4px solid #d4af37;
+      margin-bottom: 15px;
+    }
+    .profile-summary p { margin: 4px 0; font-size: 0.9rem; }
+    .visual-gallery { display: flex; flex-direction: column; gap: 20px; }
+    .gallery-item { background-color: #252525; padding: 12px; border-radius: 8px; border: 1px solid #333; }
+    .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    
+    .stamp-board-container { position: relative; width: 100%; }
+    .stamps-grid-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px; padding: 10px; box-sizing: border-box;
+    }
+    .stamp-slot { display: flex; align-items: center; justify-content: center; position: relative; }
+    .stamp-img { width: 85%; height: 85%; object-fit: contain; }
+    .opacity-fade { opacity: 0.15; filter: grayscale(100%); }
+    .badge-overlay { position: absolute; bottom: 2px; right: 2px; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+    
+    .hidden { display: none !important; }
+    .hidden-canvas { display: none !important; }
+    #lock-overlay { background-color: #252525; padding: 25px; text-align: center; border-radius: 6px; color: #ff9800; border: 1px dashed #ff9800; font-weight: bold; margin-top: 15px; }
+    .canvas-container canvas { width: 100%; height: auto; border-radius: 6px; }
+    .passport-stamp-frame { position: relative; display: inline-block; max-width: 100%; }
+    .ink-stamp-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); border: 4px dashed #e53935; color: #e53935; font-size: 1.5rem; padding: 6px 12px; background-color: rgba(20,20,20,0.9); border-radius: 6px; font-weight: bold; }
+    .download-btn { background-color: #00e676; color: #000; margin-top: 15px; }
+    .back-btn { background-color: #444; color: #fff; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>🛡️ National Smart Citizen Journey</header>
+    
+    <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+    <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
+
+    <!-- INTERMEDIARY BOOTH SCAN SUCCESS VIEW -->
+    <div id="screen-mission-alert" class="content-section text-center hidden">
+      <h2 id="mission-alert-title">Mission Cleared!</h2>
+      <div class="passport-stamp-frame">
+        <img id="mission-alert-img" src="green_citizen.png" alt="Mission State">
+        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
+      </div>
+      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
+      <button type="button" onclick="closeMissionView()">CC Return to Journey Hub</button>
+    </div>
+
+    <!-- MAIN SCROLLING INTERACTIVE STREAM HUB -->
+    <div id="screen-main-layout">
+      <!-- STEP 1: VISITOR ACCOUNT GENERATION FORM -->
+      <div id="section-register" class="content-section">
+        <h2>Step 1: Create Your Profile</h2>
+        <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
+        <div class="local-input-group">
+          <input type="text" id="input-name" placeholder="Type Your Full Name">
+          <input type="text" id="input-class" placeholder="Type Your Class">
+          <input type="text" id="input-section" placeholder="Type Your Section">
+          <button type="button" id="start-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: PASSPORT DATA OUTPUT BADGE PANEL -->
+      <div class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Status</h2>
+        <div class="profile-summary" id="status-banner">
+          <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
+          <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
+        </div>
+      </div>
+
+      <!-- STEP 3: PHOTO CARDS VERTICAL GALLERY LAYOUTS -->
+      <div class="content-section dashboard-box">
+        <div class="visual-gallery">
+          <div class="gallery-item"><h3>1. Visitor Passport</h3><img src="passport_bg.png" class="app-fluid-img"></div>
+          <div class="gallery-item"><h3>2. Welcome Banner</h3><img src="welcome.png" class="app-fluid-img"></div>
+          <div class="gallery-item"><h3>3. Exhibition Route Map</h3><img src="route_map.png" class="app-fluid-img"></div>
+          <div class="gallery-item">
+            <h3>4. Your Stamp Collection Board</h3>
+            <div class="stamp-board-container">
+              <img src="stamp_board.png" class="app-fluid-img">
+              <div class="stamps-grid-overlay">
+                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: GRAND FINALE CERTIFICATE CONTAINER WRAPPER -->
+      <div class="content-section text-center">
+        <h2>Step 3: Reward Generation</h2>
+        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
+        <div id="canvas-wrapper" class="hidden-canvas">
+          <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
+          <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
+          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
+          <button class="back-btn" type="button" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var totalMissions = 6;
+    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
+    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
+
+    window.addEventListener('DOMContentLoaded', function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var unlockId = parseInt(urlParams.get('unlock'), 10);
+      var isNewStart = urlParams.get('start');
+      
+      if (isNewStart === 'true') {
+        localStorage.clear();
