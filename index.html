@@ -172,7 +172,9 @@
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
         
         <!-- Standard HTML form structure native link transfer routing -->
-        <form action="index.html" method="GET">
+                <!-- Standard HTML form structure native link transfer routing -->
+        <form action="index.html" method="GET" onsubmit="registerUser(event); return false;">
+
           <div class="local-input-group">
             <input type="text" id="input-name" name="user" placeholder="Type Your Full Name" required autocomplete="off">
             <input type="text" id="input-class" name="class" placeholder="Type Your Class" required autocomplete="off">
