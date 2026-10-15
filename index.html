@@ -6,7 +6,7 @@
   <title>Smart Citizen Passport</title>
   <style>
     /* ==========================================
-       EMBEDDED STYLESHEET
+       FAIL-SAFE EMBEDDED STYLESHEET
        ========================================== */
     body {
       margin: 0;
@@ -52,7 +52,9 @@
       border-radius: 6px;
       font-size: 1rem;
     }
-    button {
+    
+    /* Native Form Submission Button configuration */
+    input[type="submit"] {
       width: 100%;
       padding: 14px;
       background-color: #d4af37;
@@ -62,8 +64,11 @@
       font-weight: bold;
       font-size: 1rem;
       cursor: pointer;
+      display: block;
+      appearance: none;
+      -webkit-appearance: none;
     }
-    button:hover { background-color: #f3cc4a; }
+    input[type="submit"]:hover { background-color: #f3cc4a; }
     
     .profile-summary {
       background-color: #2d2d2d;
@@ -97,8 +102,8 @@
     .canvas-container canvas { width: 100%; height: auto; border-radius: 6px; }
     .passport-stamp-frame { position: relative; display: inline-block; max-width: 100%; }
     .ink-stamp-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); border: 4px dashed #e53935; color: #e53935; font-size: 1.5rem; padding: 6px 12px; background-color: rgba(20,20,20,0.9); border-radius: 6px; font-weight: bold; }
-    .download-btn { background-color: #00e676; color: #000; margin-top: 15px; }
-    .back-btn { background-color: #444; color: #fff; margin-top: 10px; }
+    .download-btn { background-color: #00e676; color: #000; margin-top: 15px; padding: 14px; border: none; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; }
+    .back-btn { background-color: #444; color: #fff; margin-top: 10px; padding: 14px; border: none; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -116,25 +121,29 @@
         <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
       <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
-      <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
+      <button type="button" class="back-btn" onclick="closeMissionView()">危害 Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN INTERACTIVE APP STREAM -->
+    <!-- MAIN INTERACTIVE HUB -->
     <div id="screen-main-layout">
-      <!-- STEP 1: REGISTRATION COMPONENT -->
+      
+      <!-- STEP 1: REGISTRATION (Swapped to a standard semantic HTML Form) -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
-        <div class="local-input-group">
-          <!-- ⚠️ CRUCIAL FIX: Hardwired ID parameters re-linked to match JS engines lookup filters -->
-          <input type="text" id="input-name" placeholder="Type Your Full Name">
-          <input type="text" id="input-class" placeholder="Type Your Class">
-          <input type="text" id="input-section" placeholder="Type Your Section">
-          <button type="button" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
-        </div>
+        
+        <!-- The form action is handled natively by the browser on submit -->
+        <form id="regForm" onsubmit="registerUser(event)">
+          <div class="local-input-group">
+            <input type="text" id="input-name" placeholder="Type Your Full Name" required>
+            <input type="text" id="input-class" placeholder="Type Your Class" required>
+            <input type="text" id="input-section" placeholder="Type Your Section" required>
+            <input type="submit" value="Save Profile & Activate Dashboard 🚀">
+          </div>
+        </form>
       </div>
 
-      <!-- STEP 2: SUMMARY COMPONENT -->
+      <!-- STEP 2: SUMMARY VIEW -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -143,7 +152,7 @@
         </div>
       </div>
 
-      <!-- STEP 3: PHOTO CARDS VERTICAL GALLERY LAYOUTS -->
+      <!-- STEP 3: IMAGES GRID -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
           <div class="gallery-item"><h3>1. Visitor Passport</h3><img src="passport_bg.png" class="app-fluid-img"></div>
@@ -166,7 +175,7 @@
         </div>
       </div>
 
-      <!-- STEP 4: GRAND FINALE CERTIFICATE REWARD OUTPUT -->
+      <!-- STEP 4: REWARD PANEL -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
@@ -185,14 +194,4 @@
     var totalMissions = 6;
     var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
     var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
-
-    window.addEventListener('DOMContentLoaded', function() {
-      var urlParams = new URLSearchParams(window.location.search);
-      var unlockId = parseInt(urlParams.get('unlock'), 10);
-      var isNewStart = urlParams.get('start');
-      
-      if (isNewStart === 'true') {
-        localStorage.clear();
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
 
