@@ -65,6 +65,8 @@
       cursor: pointer;
       display: block;
       margin-top: 5px;
+      text-align: center;
+      text-decoration: none;
     }
     .action-btn:hover { background-color: #f3cc4a; }
     
@@ -78,7 +80,6 @@
     .profile-summary p { margin: 4px 0; font-size: 0.9rem; }
     .visual-gallery { display: flex; flex-direction: column; gap: 20px; }
     
-    /* 🎯 OVERLAP CONTAINER: Securely sandwiches text overlays over live image layouts */
     .image-overlay-wrapper {
       position: relative;
       width: 100%;
@@ -93,14 +94,13 @@
       border-radius: 4px; 
     }
     
-    /* Dynamic Text Overlays (Positioned directly over Chief Guest slots) */
     .passport-name-overlay {
       position: absolute;
-      bottom: 25px; /* Shifter coordinate: adjust up/down */
+      bottom: 25px;
       left: 0;
       width: 100%;
       text-align: center;
-      color: #ff9800; /* High contrast matching color */
+      color: #ff9800;
       font-weight: bold;
       font-size: 1.4rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
@@ -109,7 +109,7 @@
     
     .welcome-name-overlay {
       position: absolute;
-      bottom: 35px; /* Shifter coordinate: adjust up/down */
+      bottom: 35px;
       left: 0;
       width: 100%;
       text-align: center;
@@ -170,12 +170,20 @@
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
-        <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Type Your Full Name">
-          <input type="text" id="input-class" placeholder="Type Your Class">
-          <input type="text" id="input-section" placeholder="Type Your Section">
-          <button type="button" class="action-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
-        </div>
+        
+        <!-- Standard HTML form structure native link transfer routing -->
+        <form action="index.html" method="GET">
+          <div class="local-input-group">
+            <input type="text" id="input-name" name="user" placeholder="Type Your Full Name" required autocomplete="off">
+            <input type="text" id="input-class" name="class" placeholder="Type Your Class" required autocomplete="off">
+            <input type="text" id="input-section" name="section" placeholder="Type Your Section" required autocomplete="off">
+            
+            <!-- Hidden inputs preserve stamp progression counts between link pass-overs -->
+            <input type="hidden" id="hidden-unlock" name="progress" value="0">
+            
+            <button type="submit" class="action-btn">Save Profile & Activate Dashboard 🚀</button>
+          </div>
+        </form>
       </div>
 
       <!-- STEP 2: SUMMARY COMPONENT -->
@@ -225,10 +233,3 @@
                 <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 4: REWARD PANEL -->
-      <div class="content-section text-center">
-        <h2>Step 3: Reward Generation</h2>
