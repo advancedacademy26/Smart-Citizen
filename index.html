@@ -65,8 +65,6 @@
       cursor: pointer;
       display: block;
       margin-top: 5px;
-      text-align: center;
-      text-decoration: none;
     }
     .action-btn:hover { background-color: #f3cc4a; }
     
@@ -166,26 +164,16 @@
     <!-- MAIN APP INTERFACE HUB -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: REGISTRATION COMPONENT -->
+      <!-- STEP 1: REGISTRATION COMPONENT (Completely buttonless/formless block framework) -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
-        
-        <!-- Standard HTML form structure native link transfer routing -->
-                <!-- Standard HTML form structure native link transfer routing -->
-        <form action="index.html" method="GET" onsubmit="registerUser(event); return false;">
-
-          <div class="local-input-group">
-            <input type="text" id="input-name" name="user" placeholder="Type Your Full Name" required autocomplete="off">
-            <input type="text" id="input-class" name="class" placeholder="Type Your Class" required autocomplete="off">
-            <input type="text" id="input-section" name="section" placeholder="Type Your Section" required autocomplete="off">
-            
-            <!-- Hidden inputs preserve stamp progression counts between link pass-overs -->
-            <input type="hidden" id="hidden-unlock" name="progress" value="0">
-            
-            <button type="submit" class="action-btn">Save Profile & Activate Dashboard 🚀</button>
-          </div>
-        </form>
+        <div class="local-input-group">
+          <input type="text" id="input-name" placeholder="Type Your Full Name">
+          <input type="text" id="input-class" placeholder="Type Your Class">
+          <input type="text" id="input-section" placeholder="Type Your Section">
+          <button type="button" class="action-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+        </div>
       </div>
 
       <!-- STEP 2: SUMMARY COMPONENT -->
@@ -235,3 +223,12 @@
                 <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: REWARD PANEL -->
+      <div class="content-section text-center">
+        <h2>Step 3: Reward Generation</h2>
+        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
+        <div id="canvas-wrapper" class="hidden-canvas">
