@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Smart Citizen Passport</title>
   <style>
+    /* ==========================================
+       FAIL-SAFE EMBEDDED STYLESHEET
+       ========================================== */
     body {
       margin: 0;
       padding: 0;
@@ -74,18 +77,49 @@
     }
     .profile-summary p { margin: 4px 0; font-size: 0.9rem; }
     .visual-gallery { display: flex; flex-direction: column; gap: 20px; }
-    .gallery-item { background-color: #252525; padding: 12px; border-radius: 8px; border: 1px solid #333; }
     
-    /* Live Canvas Sizing for Dynamic Image Personalization */
-    .dynamic-img-canvas {
+    /* 🎯 OVERLAP CONTAINER: Securely sandwiches text overlays over live image layouts */
+    .image-overlay-wrapper {
+      position: relative;
       width: 100%;
-      height: auto;
       display: block;
-      border-radius: 4px;
-      background-color: #252525;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .app-fluid-img { 
+      width: 100%; 
+      height: auto; 
+      display: block; 
+      border-radius: 4px; 
     }
     
-    .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    /* Dynamic Text Overlays (Positioned directly over Chief Guest slots) */
+    .passport-name-overlay {
+      position: absolute;
+      bottom: 25px; /* Shifter coordinate: adjust up/down */
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #ff9800; /* High contrast matching color */
+      font-weight: bold;
+      font-size: 1.4rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+      pointer-events: none;
+    }
+    
+    .welcome-name-overlay {
+      position: absolute;
+      bottom: 35px; /* Shifter coordinate: adjust up/down */
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #ffffff;
+      font-family: "Georgia", serif;
+      font-weight: bold;
+      font-size: 1.6rem;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+      pointer-events: none;
+    }
     
     .stamp-board-container { position: relative; width: 100%; }
     .stamps-grid-overlay {
@@ -118,7 +152,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- STAMP POPUP WINDOW -->
+    <!-- MISSION CLEARANCE MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -129,9 +163,10 @@
       <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN APP SCREEN -->
+    <!-- MAIN APP INTERFACE HUB -->
     <div id="screen-main-layout">
-      <!-- STEP 1: INPUT REGISTRATION -->
+      
+      <!-- STEP 1: REGISTRATION COMPONENT -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
@@ -143,7 +178,7 @@
         </div>
       </div>
 
-      <!-- STEP 2: SUMMARY TEXT OVERVIEW -->
+      <!-- STEP 2: SUMMARY COMPONENT -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -152,28 +187,35 @@
         </div>
       </div>
 
-      <!-- STEP 3: VERTICAL GRAPHIC GALLERY -->
+      <!-- STEP 3: IMAGES GRID -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
+          
           <div class="gallery-item">
             <h3>1. Visitor Passport</h3>
-            <canvas id="passportCanvas" class="dynamic-img-canvas"></canvas>
+            <div class="image-overlay-wrapper">
+              <img src="passport_bg.png" class="app-fluid-img" alt="Visitor Passport">
+              <div id="overlay-passport-text" class="passport-name-overlay">CHIEF GUEST</div>
+            </div>
           </div>
           
           <div class="gallery-item">
             <h3>2. Welcome Banner</h3>
-            <canvas id="welcomeCanvas" class="dynamic-img-canvas"></canvas>
+            <div class="image-overlay-wrapper">
+              <img src="welcome.png" class="app-fluid-img" alt="Welcome Banner">
+              <div id="overlay-welcome-text" class="welcome-name-overlay">CHIEF GUEST</div>
+            </div>
           </div>
           
           <div class="gallery-item">
             <h3>3. Exhibition Route Map</h3>
-            <img src="route_map.png" class="app-fluid-img">
+            <img src="route_map.png" class="app-fluid-img" alt="Route Map">
           </div>
           
           <div class="gallery-item">
             <h3>4. Your Stamp Collection Board</h3>
             <div class="stamp-board-container">
-              <img src="stamp_board.png" class="app-fluid-img">
+              <img src="stamp_board.png" class="app-fluid-img" alt="Stamp Board">
               <div class="stamps-grid-overlay">
                 <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
                 <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
@@ -187,23 +229,6 @@
         </div>
       </div>
 
-      <!-- STEP 4: FINAL REWARD GENERATION -->
+      <!-- STEP 4: REWARD PANEL -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
-        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
-        <div id="canvas-wrapper" class="hidden-canvas">
-          <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
-          <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
-          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
-          <button class="back-btn" type="button" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    var totalMissions = 6;
-    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
-    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
-
