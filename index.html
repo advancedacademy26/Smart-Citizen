@@ -6,7 +6,7 @@
   <title>Smart Citizen Passport</title>
   <style>
     /* ==========================================
-       FAIL-SAFE EMBEDDED STYLESHEET
+       STANDARD SYSTEM STYLE BLOCKS
        ========================================== */
     body {
       margin: 0;
@@ -53,8 +53,7 @@
       font-size: 1rem;
     }
     
-    /* Native Form Submission Button configuration */
-    input[type="submit"] {
+    .action-btn {
       width: 100%;
       padding: 14px;
       background-color: #d4af37;
@@ -65,10 +64,9 @@
       font-size: 1rem;
       cursor: pointer;
       display: block;
-      appearance: none;
-      -webkit-appearance: none;
+      margin-top: 5px;
     }
-    input[type="submit"]:hover { background-color: #f3cc4a; }
+    .action-btn:hover { background-color: #f3cc4a; }
     
     .profile-summary {
       background-color: #2d2d2d;
@@ -113,7 +111,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- MISSION CLEARANCE POPUP MODAL -->
+    <!-- MISSION CLEARANCE MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -121,29 +119,32 @@
         <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
       <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
-      <button type="button" class="back-btn" onclick="closeMissionView()">危害 Return to Journey Hub</button>
+      <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN INTERACTIVE HUB -->
+    <!-- MAIN APP INTERFACE HUB -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: REGISTRATION (Swapped to a standard semantic HTML Form) -->
+      <!-- DIAGNOSTIC CHECK PANEL -->
+      <div class="content-section" style="background-color: #252525; border-bottom: 2px dashed #d4af37;">
+        <h2>⚙️ Connection Tester</h2>
+        <p class="instruction" style="margin-bottom: 8px;">Click the green test button below. If an alert pops up, it confirms your computer browser is successfully executing the page scripts.</p>
+        <button type="button" style="background-color: #00e676; color: #000; padding: 10px;" onclick="alert('Success! Your browser is reading the code functions perfectly.')">Test Browser Activation Link 🟢</button>
+      </div>
+
+      <!-- STEP 1: REGISTRATION COMPONENT -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
-        
-        <!-- The form action is handled natively by the browser on submit -->
-        <form id="regForm" onsubmit="registerUser(event)">
-          <div class="local-input-group">
-            <input type="text" id="input-name" placeholder="Type Your Full Name" required>
-            <input type="text" id="input-class" placeholder="Type Your Class" required>
-            <input type="text" id="input-section" placeholder="Type Your Section" required>
-            <input type="submit" value="Save Profile & Activate Dashboard 🚀">
-          </div>
-        </form>
+        <div class="local-input-group">
+          <input type="text" id="input-name" placeholder="Type Your Full Name">
+          <input type="text" id="input-class" placeholder="Type Your Class">
+          <input type="text" id="input-section" placeholder="Type Your Section">
+          <button type="button" class="action-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+        </div>
       </div>
 
-      <!-- STEP 2: SUMMARY VIEW -->
+      <!-- STEP 2: SUMMARY COMPONENT -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -192,6 +193,3 @@
 
   <script>
     var totalMissions = 6;
-    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
-    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
-
