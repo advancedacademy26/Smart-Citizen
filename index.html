@@ -164,14 +164,14 @@
     <!-- MAIN APP INTERFACE HUB -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: REGISTRATION COMPONENT (Completely buttonless/formless block framework) -->
+      <!-- STEP 1: REGISTRATION COMPONENT (Form tags completely removed to bypass browser isolation blocks) -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
         <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Type Your Full Name">
-          <input type="text" id="input-class" placeholder="Type Your Class">
-          <input type="text" id="input-section" placeholder="Type Your Section">
+          <input type="text" id="input-name" placeholder="Type Your Full Name" autocomplete="off">
+          <input type="text" id="input-class" placeholder="Type Your Class" autocomplete="off">
+          <input type="text" id="input-section" placeholder="Type Your Section" autocomplete="off">
           <button type="button" class="action-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
         </div>
       </div>
