@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Smart Citizen Passport</title>
   <style>
-    /* ==========================================
-       STANDARD SYSTEM STYLE BLOCKS
-       ========================================== */
     body {
       margin: 0;
       padding: 0;
@@ -78,6 +75,16 @@
     .profile-summary p { margin: 4px 0; font-size: 0.9rem; }
     .visual-gallery { display: flex; flex-direction: column; gap: 20px; }
     .gallery-item { background-color: #252525; padding: 12px; border-radius: 8px; border: 1px solid #333; }
+    
+    /* Live Canvas Sizing for Dynamic Image Personalization */
+    .dynamic-img-canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      background-color: #252525;
+    }
+    
     .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
     
     .stamp-board-container { position: relative; width: 100%; }
@@ -111,7 +118,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- MISSION CLEARANCE MODAL -->
+    <!-- STAMP POPUP WINDOW -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -122,17 +129,9 @@
       <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN APP INTERFACE HUB -->
+    <!-- MAIN APP SCREEN -->
     <div id="screen-main-layout">
-      
-      <!-- DIAGNOSTIC CHECK PANEL -->
-      <div class="content-section" style="background-color: #252525; border-bottom: 2px dashed #d4af37;">
-        <h2>⚙️ Connection Tester</h2>
-        <p class="instruction" style="margin-bottom: 8px;">Click the green test button below. If an alert pops up, it confirms your computer browser is successfully executing the page scripts.</p>
-        <button type="button" style="background-color: #00e676; color: #000; padding: 10px;" onclick="alert('Success! Your browser is reading the code functions perfectly.')">Test Browser Activation Link 🟢</button>
-      </div>
-
-      <!-- STEP 1: REGISTRATION COMPONENT -->
+      <!-- STEP 1: INPUT REGISTRATION -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
@@ -144,7 +143,7 @@
         </div>
       </div>
 
-      <!-- STEP 2: SUMMARY COMPONENT -->
+      <!-- STEP 2: SUMMARY TEXT OVERVIEW -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -153,12 +152,24 @@
         </div>
       </div>
 
-      <!-- STEP 3: IMAGES GRID -->
+      <!-- STEP 3: VERTICAL GRAPHIC GALLERY -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
-          <div class="gallery-item"><h3>1. Visitor Passport</h3><img src="passport_bg.png" class="app-fluid-img"></div>
-          <div class="gallery-item"><h3>2. Welcome Banner</h3><img src="welcome.png" class="app-fluid-img"></div>
-          <div class="gallery-item"><h3>3. Exhibition Route Map</h3><img src="route_map.png" class="app-fluid-img"></div>
+          <div class="gallery-item">
+            <h3>1. Visitor Passport</h3>
+            <canvas id="passportCanvas" class="dynamic-img-canvas"></canvas>
+          </div>
+          
+          <div class="gallery-item">
+            <h3>2. Welcome Banner</h3>
+            <canvas id="welcomeCanvas" class="dynamic-img-canvas"></canvas>
+          </div>
+          
+          <div class="gallery-item">
+            <h3>3. Exhibition Route Map</h3>
+            <img src="route_map.png" class="app-fluid-img">
+          </div>
+          
           <div class="gallery-item">
             <h3>4. Your Stamp Collection Board</h3>
             <div class="stamp-board-container">
@@ -176,7 +187,7 @@
         </div>
       </div>
 
-      <!-- STEP 4: REWARD PANEL -->
+      <!-- STEP 4: FINAL REWARD GENERATION -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
@@ -193,3 +204,6 @@
 
   <script>
     var totalMissions = 6;
+    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
+    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
+
