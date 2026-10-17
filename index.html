@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Smart Citizen Passport Portal</title>
+  <title>Smart Citizen Passport</title>
   <style>
     /* ==========================================================================
-       FAIL-SAFE EMBEDDED SYSTEM SHEET
+       FAIL-SAFE EMBEDDED EVENT STYLESHEET
        ========================================================================== */
     body {
       margin: 0; padding: 0;
@@ -32,6 +32,14 @@
     h3 { color: #ffffff; font-size: 1rem; margin: 12px 0 6px 0; font-weight: 600; }
     .instruction { color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.5; }
     
+    /* Premium Large Digit Entry Box */
+    .ticket-input-box {
+      width: 100%; box-sizing: border-box; padding: 16px;
+      background-color: #1e2d3d; border: 2px solid #d4af37; color: #fff;
+      border-radius: 8px; font-size: 1.5rem; font-weight: bold;
+      text-align: center; letter-spacing: 3px; outline: none;
+    }
+    
     .profile-summary {
       background-color: #1e2d3d; padding: 14px 18px; border-radius: 8px;
       border-left: 4px solid #00e676; margin-bottom: 15px;
@@ -42,7 +50,7 @@
     .image-overlay-wrapper { position: relative; width: 100%; display: block; border-radius: 8px; overflow: hidden; }
     .app-fluid-img { width: 100%; height: auto; display: block; }
     
-    /* Pixel-Perfect dynamic overlays alignments over printed graphics structures */
+    /* Precision Overlay Anchors over Template Images */
     .passport-name-overlay {
       position: absolute; bottom: 22px; left: 0; width: 100%;
       text-align: center; color: #ff9800; font-weight: 800; font-size: 1.35rem;
@@ -85,35 +93,44 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Pass</header>
     
-    <!-- FULL-SCREEN CELEBRATION EFFECTS LAYER -->
+    <!-- CELEBRATION SHOWER PARTICLE EFFECTS CANVAS -->
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- SINGLE BOOTH CHECKPOINT POPUP VIEW -->
+    <!-- BOOTH MILESTONE ALERT MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title" class="text-center" style="border:none; padding:0; color:#00e676;">Mission Cleared!</h2>
       <div style="position:relative; display:inline-block; margin: 15px 0;">
         <img id="mission-alert-img" src="green_citizen.png" style="max-width:140px; height:auto; display:block;">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); border: 4px dashed #e53935; color: #e53935; font-size: 1.2rem; padding: 4px 8px; background-color: rgba(20,20,20,0.95); border-radius: 4px; font-weight: bold; white-space:nowrap;">STAMPED ✔️</div>
       </div>
-      <p class="instruction">Outstanding milestone logged! This development badge has been permanently inked into your journey passport dashboard below.</p>
+      <p class="instruction">Outstanding milestone logged! This development badge has been permanently inked into your journey maps below.</p>
       <button type="button" class="download-btn" style="background-color: #334155; color: #fff;" onclick="closeMissionView()">↩️ Return to Explorer Hub</button>
     </div>
 
-    <!-- MAIN DASHBOARD CONTENT BLOCK -->
+    <!-- MAIN HUB PANEL VIEW -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: SUMMARY EXPLORER PROFILE STATUS BANNER -->
-      <div class="content-section dashboard-box">
-        <h2>Exhibition Passport Verification</h2>
-        <div class="profile-summary" id="status-banner">
-          <p>Citizen Name: <strong id="dash-name" style="color: #d4af37;">Not Registered Yet</strong></p>
-          <p>Class Group: <span id="dash-class">--</span> | Section Room: <span id="dash-section">--</span></p>
+      <!-- STEP 1: KEYPAD ENTRY SWITCH ENGINE (Form wrappers and activation buttons completely removed) -->
+      <div id="section-register" class="content-section">
+        <h2>Step 1: Activate Pass Number</h2>
+        <p class="instruction">Type your assigned 3-digit pass, seat, or roll number below. The smart tracker system updates your dashboard live on your keystroke—no save buttons required!</p>
+        <div class="local-input-group">
+          <!-- The oninput action listener fires instantly processing variables natively on every keystroke -->
+          <input type="number" id="ticketNumberInput" class="ticket-input-box" placeholder="--- TYPE NUMBER ---" oninput="liveDigitTracking()">
         </div>
-        <p class="instruction" id="link-status-msg" style="color: #00e676; font-weight: bold; margin-bottom: 0;">🔒 Awaiting secure gateway check-in token credentials...</p>
       </div>
 
-      <!-- STEP 2: VERTICAL GALLERY IMAGE PHOTO DISPLAY CARDS -->
+      <!-- STEP 2: PREVIEW DISPLAY COMPONENT -->
+      <div class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Status</h2>
+        <div class="profile-summary" id="status-banner">
+          <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
+          <p>Exhibition Pass ID: <span id="dash-class">--</span></p>
+        </div>
+      </div>
+
+      <!-- STEP 3: VERTICAL IMAGES CARDS STACK -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
           
@@ -156,21 +173,9 @@
         </div>
       </div>
 
-      <!-- STEP 3: REWARD CANVAS EXPORTER WINDOW -->
+      <!-- STEP 4: REWARD PANEL CANVAS SYSTEM EXPORTER -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
         <div id="canvas-wrapper" class="hidden-canvas">
           <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized document layout has been successfully built below.</p>
-          <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border-radius:8px;">
-          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
-          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Save Image File to Device</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    var totalMissions = 6;
-    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
