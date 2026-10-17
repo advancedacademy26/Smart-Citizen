@@ -41,7 +41,6 @@
     h3 { color: #ffffff; font-size: 1rem; margin: 10px 0 5px 0; }
     .instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
     
-    /* Dedicated Numerical Input Field layout */
     .ticket-input-box {
       width: 100%;
       box-sizing: border-box;
@@ -76,7 +75,6 @@
     }
     .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
     
-    /* Text Overlays positioned right over Chief Guest template slots natively */
     .passport-name-overlay {
       position: absolute;
       bottom: 25px; left: 0; width: 100%;
@@ -124,7 +122,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- MISSION CLEARANCE MODAL -->
+    <!-- MISSION POPUP DISPLAY OVERLAY -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -135,20 +133,19 @@
       <button type="button" class="download-btn" style="background-color: #444; color: #fff;" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN APP STRUCTURE INTERFACE HUB -->
+    <!-- MAIN HUB WINDOW -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: AUTOMATED DIGIT KEYPAD SLOT (No click buttons inside this block framework) -->
+      <!-- STEP 1: KEYPAD INPUT FIELD BOX -->
       <div id="section-register" class="content-section">
         <h2>Step 1: Enter Your Pass Number</h2>
-        <p class="instruction">Type any 3-digit number below (e.g., your desk number, roll number, or a visitor code) to instantly initialize your passport card tracking matrix lines live!</p>
+        <p class="instruction">Type any number below (e.g., a ticket code or student seat number) to instantly activate your live passport tracking status.</p>
         <div class="local-input-group">
-          <!-- oninput tracker fires instantly bypassing button element completely -->
           <input type="number" id="ticketNumberInput" class="ticket-input-box" placeholder="--- TYPE NUMBER ---" oninput="liveKeypadRegistration()">
         </div>
       </div>
 
-      <!-- STEP 2: SUMMARY CARD BANNER -->
+      <!-- STEP 2: RUNTIME PREVIEW BOARD BANNER -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -157,7 +154,7 @@
         </div>
       </div>
 
-      <!-- STEP 3: PHOTO CARDS VERTICAL GALLERY -->
+      <!-- STEP 3: IMAGES GALLERIES LAYOUT SECTIONS -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
           <div class="gallery-item">
@@ -198,10 +195,19 @@
         </div>
       </div>
 
-      <!-- STEP 4: REWARD GENERATION CANVAS WINDOW -->
+      <!-- STEP 4: REWARD DYNAMIC CANVAS WINDOW -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
         <div id="canvas-wrapper" class="hidden-canvas">
           <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
           <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
+          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var totalMissions = 6;
