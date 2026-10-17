@@ -6,7 +6,7 @@
   <title>Smart Citizen Passport</title>
   <style>
     /* ==========================================================================
-       FAIL-SAFE EMBEDDED STYLESHEET (Bypasses all external style file constraints)
+       FAIL-SAFE EMBEDDED STYLESHEET
        ========================================================================== */
     body {
       margin: 0;
@@ -41,6 +41,22 @@
     h3 { color: #ffffff; font-size: 1rem; margin: 10px 0 5px 0; }
     .instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
     
+    /* Dedicated Numerical Input Field layout */
+    .ticket-input-box {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px;
+      background-color: #2d2d2d;
+      border: 2px solid #d4af37;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 2px;
+      outline: none;
+    }
+    
     .profile-summary {
       background-color: #2d2d2d;
       padding: 12px 15px;
@@ -60,12 +76,12 @@
     }
     .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
     
-    /* Text Overlay Positioning Layout Coordinates */
+    /* Text Overlays positioned right over Chief Guest template slots natively */
     .passport-name-overlay {
       position: absolute;
       bottom: 25px; left: 0; width: 100%;
       text-align: center; color: #ff9800;
-      font-weight: bold; font-size: 1.4rem;
+      font-weight: bold; font-size: 1.3rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
       pointer-events: none;
     }
@@ -73,7 +89,7 @@
       position: absolute;
       bottom: 35px; left: 0; width: 100%;
       text-align: center; color: #ffffff;
-      font-family: "Georgia", serif; font-weight: bold; font-size: 1.6rem;
+      font-family: "Georgia", serif; font-weight: bold; font-size: 1.5rem;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
       pointer-events: none;
     }
@@ -108,7 +124,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- MISSION POPUP MODAL -->
+    <!-- MISSION CLEARANCE MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -119,20 +135,29 @@
       <button type="button" class="download-btn" style="background-color: #444; color: #fff;" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN APP SCREEN CONTAINER -->
+    <!-- MAIN APP STRUCTURE INTERFACE HUB -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: RUNTIME STATUS BANNER BOARD (All buttons completely removed) -->
-      <div class="content-section dashboard-box">
-        <h2>Your Live Explorer Passport</h2>
-        <div class="profile-summary" id="status-banner">
-          <p>Citizen Name: <strong id="dash-name" style="color: #d4af37;">Not Registered Yet</strong></p>
-          <p>Class Group: <span id="dash-class">--</span> | Section Room: <span id="dash-section">--</span></p>
+      <!-- STEP 1: AUTOMATED DIGIT KEYPAD SLOT (No click buttons inside this block framework) -->
+      <div id="section-register" class="content-section">
+        <h2>Step 1: Enter Your Pass Number</h2>
+        <p class="instruction">Type any 3-digit number below (e.g., your desk number, roll number, or a visitor code) to instantly initialize your passport card tracking matrix lines live!</p>
+        <div class="local-input-group">
+          <!-- oninput tracker fires instantly bypassing button element completely -->
+          <input type="number" id="ticketNumberInput" class="ticket-input-box" placeholder="--- TYPE NUMBER ---" oninput="liveKeypadRegistration()">
         </div>
-        <p class="instruction" style="color: #00e676; font-weight: bold; margin-bottom: 0;" id="welcome-alert-msg">🟢 Secure Passport Tracking Link Active.</p>
       </div>
 
-      <!-- STEP 2: PHOTO CARDS VERTICAL GALLERY -->
+      <!-- STEP 2: SUMMARY CARD BANNER -->
+      <div class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Status</h2>
+        <div class="profile-summary" id="status-banner">
+          <p>Citizen Name: <strong id="dash-name">Not Registered Yet</strong></p>
+          <p>Pass ID Tracking Code: <span id="dash-class">--</span></p>
+        </div>
+      </div>
+
+      <!-- STEP 3: PHOTO CARDS VERTICAL GALLERY -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
           <div class="gallery-item">
@@ -173,24 +198,10 @@
         </div>
       </div>
 
-      <!-- STEP 3: REWARD GENERATION ENGINE -->
+      <!-- STEP 4: REWARD GENERATION CANVAS WINDOW -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
         <div id="canvas-wrapper" class="hidden-canvas">
           <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
           <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
-          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    var totalMissions = 6;
-    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
-    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
-
-    // 🚀 FAILSAFE CLOUD LINK ENGINE: Reads text fields straight out of the URL bar address
-    var urlParams = new URLSearchParams(window.location.search);
