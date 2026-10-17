@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Smart Citizen Passport</title>
   <style>
-    /* ==========================================
-       FAIL-SAFE EMBEDDED STYLESHEET
-       ========================================== */
     body {
       margin: 0;
       padding: 0;
@@ -41,32 +38,23 @@
     h3 { color: #ffffff; font-size: 1rem; margin: 10px 0 5px 0; }
     .instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
     
-    .local-input-group input {
+    /* Premium Dropdown Selector Styling */
+    .roster-dropdown {
       width: 100%;
-      box-sizing: border-box;
       padding: 14px;
-      margin-bottom: 12px;
       background-color: #2d2d2d;
-      border: 1px solid #444;
       color: #fff;
+      border: 2px solid #d4af37;
       border-radius: 6px;
       font-size: 1rem;
-    }
-    
-    .action-btn {
-      width: 100%;
-      padding: 14px;
-      background-color: #d4af37;
-      color: #000;
-      border: none;
-      border-radius: 6px;
       font-weight: bold;
-      font-size: 1rem;
       cursor: pointer;
-      display: block;
-      margin-top: 5px;
+      outline: none;
     }
-    .action-btn:hover { background-color: #f3cc4a; }
+    .roster-dropdown option {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
     
     .profile-summary {
       background-color: #2d2d2d;
@@ -85,36 +73,21 @@
       border-radius: 8px;
       overflow: hidden;
     }
-    .app-fluid-img { 
-      width: 100%; 
-      height: auto; 
-      display: block; 
-      border-radius: 4px; 
-    }
+    .app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
     
     .passport-name-overlay {
       position: absolute;
-      bottom: 25px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      color: #ff9800;
-      font-weight: bold;
-      font-size: 1.4rem;
+      bottom: 25px; left: 0; width: 100%;
+      text-align: center; color: #ff9800;
+      font-weight: bold; font-size: 1.4rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
       pointer-events: none;
     }
-    
     .welcome-name-overlay {
       position: absolute;
-      bottom: 35px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      color: #ffffff;
-      font-family: "Georgia", serif;
-      font-weight: bold;
-      font-size: 1.6rem;
+      bottom: 35px; left: 0; width: 100%;
+      text-align: center; color: #ffffff;
+      font-family: "Georgia", serif; font-weight: bold; font-size: 1.6rem;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
       pointer-events: none;
     }
@@ -150,7 +123,7 @@
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- MISSION CLEARANCE MODAL -->
+    <!-- MISSION POPUP MODAL -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -161,22 +134,29 @@
       <button type="button" class="back-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- MAIN APP INTERFACE HUB -->
+    <!-- MAIN APP SCREEN -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: REGISTRATION COMPONENT -->
+      <!-- STEP 1: BUTTONLESS CHOOSE-YOUR-NAME SELECTOR -->
       <div id="section-register" class="content-section">
-        <h2>Step 1: Create Your Profile</h2>
-        <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
-        <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Type Your Full Name">
-          <input type="text" id="input-class" placeholder="Type Your Class">
-          <input type="text" id="input-section" placeholder="Type Your Section">
-          <button type="button" class="action-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
-        </div>
+        <h2>Step 1: Select Your Name</h2>
+        <p class="instruction">Scroll and click your name from the official student list below to instantly activate your digital passport tracker card.</p>
+        
+        <!-- Native Selection Box drops all touch-delay or button click failures entirely -->
+        <select id="studentRoster" class="roster-dropdown" onchange="autoSelectStudent()">
+          <option value="" disabled selected>--- Choose Your Name Here ---</option>
+          
+          <!-- 📝 REPLACE THESE TEST NAMES BELOW WITH YOUR REAL STUDENT ROSTER NAMES -->
+          <option value="AARAV SHARMA|IX|A">AARAV SHARMA (IX-A)</option>
+          <option value="ANANYA PATEL|IX|B">ANANYA PATEL (IX-B)</option>
+          <option value="DIYA MISHRA|X|A">DIYA MISHRA (X-A)</option>
+          <option value="ROHAN VERMA|X|C">ROHAN VERMA (X-C)</option>
+          <option value="RASHMI PENDE|IX|A">RASHMI PENDE (IX-A)</option>
+          
+        </select>
       </div>
 
-      <!-- STEP 2: SUMMARY COMPONENT -->
+      <!-- STEP 2: SUMMARY BANNER -->
       <div class="content-section dashboard-box">
         <h2>Step 2: Your Explorer Status</h2>
         <div class="profile-summary" id="status-banner">
@@ -185,10 +165,9 @@
         </div>
       </div>
 
-      <!-- STEP 3: IMAGES GRID -->
+      <!-- STEP 3: VERTICAL IMAGES -->
       <div class="content-section dashboard-box">
         <div class="visual-gallery">
-          
           <div class="gallery-item">
             <h3>1. Visitor Passport</h3>
             <div class="image-overlay-wrapper">
@@ -227,7 +206,7 @@
         </div>
       </div>
 
-      <!-- STEP 4: REWARD PANEL -->
+      <!-- STEP 4: REWARD GENERATION -->
       <div class="content-section text-center">
         <h2>Step 3: Reward Generation</h2>
         <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
